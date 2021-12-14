@@ -1,0 +1,5 @@
+const findMax = (arr) => {
+    return arr.reduce((max,value) => value > max ? value : max); 
+}
+
+console.log(findMax([1,20,3,4,5,6,7]));
