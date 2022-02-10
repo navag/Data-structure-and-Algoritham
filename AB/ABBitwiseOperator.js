@@ -148,6 +148,16 @@ const reverseBit = (A) => {
         }
         
         return nSum-totSum;
+
+        //with Xor operation
+      let a=0,b=0;
+        for(let i=0;i<=n;i++){
+            a=a^i;
+        }
+        for(let i=0;i<n;i++){
+            b=b^array[i];
+        }
+        return a^b;
     }
 
 // console.log(isEven(3));
