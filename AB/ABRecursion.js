@@ -34,11 +34,25 @@ const helper = (grid, rowInd, colInd) => {
     helper(grid,rowInd, colInd -1);
 }
 
+// Q. The problem is to count all the possible paths from top left to bottom right of a MxN matrix with the 
+// constraints that from each cell you can either move to right or down.
+
+        const nop = (m,n) => {
+            if(m === 1 || n === 1) return 1;
+        return nop(m,n-1) + nop(m-1,n);
+        }
+
+//Q. Print the powerset of given string
+
+
+ console.log(nop(3,3))
+ 
 console.log(numIslands(
 [["1","1","1","1","0"],
 ["1","1","0","1","0"],
 ["1","1","0","0","0"],
 ["0","0","0","0","1"]]
 ));
+
 
  console.log(nop(3,3))

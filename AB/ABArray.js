@@ -131,7 +131,7 @@ const maxProfitMultipleTransctions = (arr) => {
 // If width of each block is 1, 
 // compute how much water can be trapped between the blocks during the rainy season.
 
-//here we will use Array preprocessing
+//here we will use Array preprocessing(Rain water tapping)
 
 const RWT = (arr) => {
     let leftArr = [arr[0]];
@@ -152,12 +152,6 @@ const RWT = (arr) => {
     }
     return ans;
 }
-
-const findMax = (arr) => {
-    return arr.reduce((max,value) => value > max ? value : max); 
-}
-
-//console.log(findMax([1,20,3,4,5,6,7]));
 
 
 // console.log(majorityEl2([5,1,5,1,1,5,5,5]));
