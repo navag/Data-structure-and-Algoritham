@@ -7,4 +7,12 @@ function countUniqueValues(arr){
     uniqValArray.push(arr[arr.length-1])
 return uniqValArray
 }
-countUniqueValues([1,2,2,5,7,7,99,99,100,101])
+// by using set
+function countUniqueValues1(arr){
+    if(arr.length === 0) return 0;
+    const uniqValSet = new Set([...arr]);
+    
+return uniqValArray.from(uniqValSet);
+}
+countUniqueValues([1,2,2,5,7,7,99,99,100,101]);
+countUniqueValues1([1,2,2,5,7,7,99,99,100,101]);
