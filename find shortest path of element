@@ -1,0 +1,119 @@
+ Question: Generate the Optimal Child Selector
+
+You are given an HTML structure as follows:
+
+<a1>
+  <a2>
+    <a3>Destination</a3>
+  </a2>
+
+  <div>
+    <a2>
+      <a3>Destination</a3>
+    </a2>
+  </div>
+
+  <div>
+    <div>
+      <a2>
+        <a3>Destination</a3>
+      </a2>
+    </div>
+  </div>
+</a1>
+
+In this structure:
+    <a1/> is the source element.
+    <a3/> is the destination element.
+
+Your task is to write a JavaScript function, findOptimalChildSelector, that generates the shortest child selector (>) path from the source element (a1) to the destination element (a3).
+    
+For example:
+In the provided HTML,  to reach a3 from a1 the shortest child selector is: a1 > a2 > a3.
+
+Function Signature:
+
+function findOptimalChildSelector(srcSelector, dstSelector) {
+    // Implement your solution here, return type is string (i.e 'a1 > a2 > a3')
+}
+
+Example:
+
+const optimalSelector = findOptimalChildSelector('a1', 'a3');
+console.log(optimal Selector);
+
+The output should be:
+a1 > a2 > a3
+
+function findOptimalChildSelector(srcSelector, dstSelector) {
+    const getSourceNode = document.getElementByTagName(`${srcSelector}`);
+   
+    let prevFoundTagsHr = [];
+    let currentFoundTagsHr = [];
+
+    function findChild(tree) {
+        for(element of tree) {
+        if(element.tagName === dstSelector.toUpperCase()) {
+            currentFoundTagsHr.push(element.tagName);
+            if(prevFoundTagsHr.length === 0 || prevFoundTagsHr.lenght > currentFoundTagsHr.length) {
+                prevFoundTagsHr = [...currentFoundTagsHr];
+            }
+                currentFoundTagsHr = [];
+        } else {
+            if(element.children.length) {
+            currentFoundTagsHr.push(element.tagName);
+            findChild(element.children);
+            }
+        }
+        }
+        return prevFoundTagsHr.join('>');
+    }
+    findChild(getSourceNode);
+}
+
+findOptimalChildSelector()
+
+// chatGPT correct solution
+function findOptimalChildSelector(srcSelector, dstSelector) {
+    const srcElement = document.querySelector(srcSelector); // Get the source node
+    
+    if (!srcElement) return ''; // If the source element is not found, return an empty string
+
+    let prevFoundTagsHr = []; // To store the shortest path found
+    
+    // Recursive function to traverse the DOM and find the destination element
+    function findChild(tree, path = []) {
+        for (let element of tree) {
+            // Add the current element tag name to the path
+            path.push(element.tagName.toLowerCase());
+            
+            // If we find the destination element, check the path length
+            if (element.tagName.toLowerCase() === dstSelector.toLowerCase()) {
+                // If the path is shorter, update the previous path
+                if (prevFoundTagsHr.length === 0 || path.length < prevFoundTagsHr.length) {
+                    prevFoundTagsHr = [...path];
+                }
+                // Reset the path after finding the destination
+                path.pop();
+            } else {
+                // Otherwise, traverse the children
+                if (element.children.length) {
+                    findChild(element.children, path);
+                }
+            }
+            
+            // Pop the current element tag name after processing it
+            path.pop();
+        }
+    }
+    
+    // Start the recursive search from the source element
+    findChild([srcElement]);
+
+    // Return the result as a selector path if found
+    return prevFoundTagsHr.length ? prevFoundTagsHr.join(' > ') : '';
+}
+
+// Example usage:
+const optimalSelector = findOptimalChildSelector('a1', 'a3');
+console.log(optimalSelector); // Output: a1 > a2 > a3
