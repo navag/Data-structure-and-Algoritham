@@ -1,0 +1,139 @@
+// Q: Define PromisePolyfil without using the actual Promise to get the below test cases passed
+
+// Note: Paste the PromisePolyfil definition only in https://pastebin.com/ and share the link in the chat at the end.
+
+// Test 1: Promise chaining with mixed resolve and reject
+
+class PromisePolyfil {
+  constructor(callback) {
+    this.thenHandlers = []
+    this.catchHandlers = []
+    this.finallyHandler
+    this.isResolved = false
+    this.isRejected = false
+    this.resolvedData
+    this.rejectedData
+    const resolve = (r) => {
+      this.isResolved = true
+      if (this.thenHandlers.length) {
+        const output = this.thenHandlers.reduce(
+          (acc, currentThen) => currentThen(acc),
+          r,
+        )
+        finallyHandler()
+        return output
+      }
+      this.resolvedData = r
+    }
+
+    const reject = (err) => {
+      this.isRejected = true
+      if (this.catchHandlers.length) {
+        const output = this.catchHandlers.reduce(
+          (acc, currentCatch) => this.currentCatchn(acc),
+          r,
+        )
+        finallyHandler()
+        return output
+      }
+      this.rejectedData = err
+    }
+    callback(resolve, reject)
+  }
+
+  then(cb) {
+    if (this.resolved) {
+      cb(this.resolvedData)
+    } else {
+      this.thenHandlers.push(cb)
+    }
+    return this
+  }
+
+  catch(cb) {
+    if (this.isRejected) {
+      cb(this.rejectedData)
+    } else {
+      this.catchHandlers.push(cb)
+    }
+    return this
+  }
+
+  finally(cb) {
+    if (this.isResolved || this.isRejected) {
+      cb()
+    } else {
+      this.finallyHandler = cb
+    }
+    return this
+  }
+}
+
+const p1 = new PromisePolyfil((resolve, reject) => {
+  resolve("Start")
+})
+
+p1.then((result) => {
+  console.log(result) // Expected: 'Start'
+  return "Step 1"
+})
+  .then((result) => {
+    console.log(result) // Expected: 'Step 1'
+    throw "Error at Step 2"
+  })
+  .catch((err) => {
+    console.error(err) // Expected: 'Error at Step 2'
+    return "Recovered"
+  })
+  .then((result) => {
+    console.log(result) // Expected: 'Recovered'
+  })
+  .finally(() => {
+    console.log("Chain complete") // Expected: 'Chain complete'
+  })
+
+// // Test 2: Nested Promises
+// const p2 = new PromisePolyfil((resolve, reject) => {
+//     resolve('Outer Promise Resolved');
+// });
+
+// p2.then(result => {
+//     console.log(result);  // Expected: 'Outer Promise Resolved'
+//     return new PromisePolyfil((resolve, reject) => {
+//         setTimeout(() => resolve('Inner Promise Resolved'), 500);
+//     });
+// }).then(result => {
+//     console.log(result);  // Expected: 'Inner Promise Resolved'
+// }).catch(err => {
+//     console.error(err);   // Should not be called
+// });
+
+// // Test 3: Handling multiple `.catch` calls
+// const p3 = new PromisePolyfil((resolve, reject) => {
+//     reject('Initial Failure');
+// });
+
+// p3.catch(err => {
+//     console.error(err);  // Expected: 'Initial Failure'
+//     throw 'Failure in Catch';
+// }).catch(err => {
+//     console.error(err);  // Expected: 'Failure in Catch'
+// }).finally(() => {
+//     console.log('Final cleanup');  // Expected: 'Final cleanup'
+// });
+
+// // Test 4: Async behavior with delayed resolution
+// const p4 = new PromisePolyfil((resolve, reject) => {
+//     setTimeout(() => resolve('Delayed Resolution'), 1000);
+// });
+
+// p4.then(result => {
+//     console.log(result);  // Expected: 'Delayed Resolution'
+//     return new PromisePolyfil((resolve) => {
+//         setTimeout(() => resolve('Next Delayed Step'), 500);
+//     });
+// }).then(result => {
+//     console.log(result);  // Expected: 'Next Delayed Step'
+// }).finally(() => {
+//     console.log('All done');  // Expected: 'All done'
+// });
